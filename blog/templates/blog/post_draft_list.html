@@ -1,0 +1,15 @@
+{% extends 'blog/base.html '%}
+
+{% block content %}
+  <h1>My drafts List</h1>
+  {% for draft in post %}
+    <h3>{{draft.title}}</h3>
+    <p>{{draft.text|safe}}</p>
+    <p> Created Date: {{draft.created_date|date:'D M Y'}} </p>
+    <p><a href="{% url 'blog:publish' pk=draft.pk %}" class="btn btn-primary">Publish</a>
+        <a class="btn btn-primary" href="{% url 'blog:post_delete' pk=draft.pk %}">Delete</a>
+    </p>
+
+  {% endfor %}
+
+{% endblock %}

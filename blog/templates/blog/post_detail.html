@@ -1,0 +1,39 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+  <div class="container">
+    <h1>{{post.title}}</h1>
+    <h4>Published Date: {{post.published_date|date:"D M Y"}}</h4>
+    <br>
+    <p>{{post.text|safe}}</p>
+    <p><a class="btn btn-primary" href="{% url 'blog:post_update' pk=post.pk %}">Update</a>
+    <a class="btn btn-primary" href="{% url 'blog:post_delete' pk=post.pk %}">Delete</a> </p>
+    <div class="jumbotron">
+
+      {% if user.is_authenticated %}
+        <p><a href="{% url 'blog:add_comment' pk=post.pk %}">Add Comment</a> </p>
+      {% endif %}
+      <p>Comments: {{post.approve_comment.count}}</p>
+      {% for comment in post.comments.all%}
+      {% if comment.approved_comment %}
+      <p>Author: {{comment.author}}</p>
+      <p>{{comment.text|safe}}</p>
+      <p>{{comment.created_date|date:'D M Y'}}</p>
+        {% if user.is_authenticated %}
+        <p><a href="{% url 'blog:delete_comment' pk=comment.pk %}">delete</a> </p>
+        {% endif %}
+      {% endif %}
+      {% if not comment.approved_comment %}
+      <p>Author: {{comment.author}}</p>
+      <p>{{comment.text|safe}}</p>
+      <p>{{comment.created_date|date:'D M Y'}}<a class="btn btn-primary" href="{% url 'blog:approve_comment' pk=comment.pk %}">Approve</a> </p>
+
+      {% endif %}
+
+      {% endfor %}
+
+
+    </div>
+  </div>
+
+{% endblock %}
